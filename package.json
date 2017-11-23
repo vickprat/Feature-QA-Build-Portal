@@ -1,0 +1,19 @@
+{
+  "name": "feature-qa-build-portal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vickprat/Feature-QA-Build-Portal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vickprat/Feature-QA-Build-Portal/issues"
+  },
+  "homepage": "https://github.com/vickprat/Feature-QA-Build-Portal#readme"
+}
