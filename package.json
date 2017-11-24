@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/vickprat/Feature-QA-Build-Portal/issues"
   },
-  "homepage": "https://github.com/vickprat/Feature-QA-Build-Portal#readme"
+  "homepage": "https://github.com/vickprat/Feature-QA-Build-Portal#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }
