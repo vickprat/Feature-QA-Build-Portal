@@ -1,16 +1,16 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var GroceryItemList = require('./components/GroceryItemList.jsx');
-var groceryItemStore = require('./stores/GroceryItemStore.jsx');
+var FeatureList = require('./components/FeatureList.jsx');
+var featureStore = require('./stores/FeatureStore.jsx');
 
-var initial = groceryItemStore.getItems();
+var initial = featureStore.getFeatures();
 
 function render(){
-    ReactDOM.render(<GroceryItemList items={initial}/>, app);
+    ReactDOM.render(<FeatureList features={initial}/>, app);
 }
 
-groceryItemStore.onChange(function(items){
-    initial = items;
+featureStore.onChange(function(features){
+    initial = features;
     render();
 })
 
