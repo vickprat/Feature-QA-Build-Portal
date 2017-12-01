@@ -76,7 +76,8 @@ module.exports = createReactClass({
                     />
                     <List>
                         <ListItem>
-                            <Subheader inset={true}>Get build for a feature or remove a feature from the features list</Subheader>
+                            <Divider />
+                            <Subheader style={{fontSize:'25px'}} inset={true}>Get build for a feature or remove a feature from the features list</Subheader>
                             <AutoComplete
                               floatingLabelText="Search feature name"
                               filter={AutoComplete.caseInsensitiveFilter}
@@ -99,8 +100,9 @@ module.exports = createReactClass({
                     </List>
                     <Divider />
                     <List>
-                        <Subheader inset={true}>Add new feature to the features list</Subheader>
+                        <Subheader inset={true} style={{fontSize:'25px'}}>Add new feature to the features list</Subheader>
                         <FeatureListAddFeature />
+                        <Divider />
                     </List>
                 </MuiThemeProvider>
             </div>
