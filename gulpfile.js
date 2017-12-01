@@ -10,7 +10,7 @@ gulp.task('live-server', function(){
     server.start();
 });
 
-gulp.task('bundle', ['copy'], function(){
+gulp.task('bundle', function(){
     return browserify({
         entries:'app/main.jsx',
         debug:true,
@@ -19,11 +19,6 @@ gulp.task('bundle', ['copy'], function(){
     .bundle()
     .pipe(source('app.js'))
     .pipe(gulp.dest('./.tmp'));
-});
-
-gulp.task('copy', function(){
-    gulp.src(['bower_components/**'])
-		.pipe(gulp.dest('./.tmp/bower_components'));
 });
 
 gulp.task('serve', ['bundle', 'live-server'], function(){
