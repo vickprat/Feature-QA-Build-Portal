@@ -35,7 +35,7 @@ module.exports = createReactClass({
     featureSelected(chosenRequest, index){
         this.setState({value:chosenRequest, selectedIndex:index, buttonPressed:false});
     },
-    remove(e){
+    removeFeature(e){
         e.preventDefault();
         action.remove(this.props.features[this.state.selectedIndex]);
         this.setState({value:"", buildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:true, message:"Feature removed successfully!!"});
@@ -94,7 +94,7 @@ module.exports = createReactClass({
                             <FlatButton label={this.state.timestamp} disabled={true}/>
                         </ListItem>
                         <ListItem>
-                            <RaisedButton label="Remove" style={buttonStyles.customWidth} secondary={true} onClick={this.remove} disabled={this.state.value==""}/>
+                            <RaisedButton label="Remove" style={buttonStyles.customWidth} secondary={true} onClick={this.removeFeature} disabled={this.state.value==""}/>
                         </ListItem>
                     </List>
                     <Divider />
