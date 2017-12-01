@@ -5,6 +5,7 @@ var RaisedButton = require('material-ui/RaisedButton').default;
 var TextField = require('material-ui/TextField').default;
 var List = require('material-ui/List').default;
 var ListItem = require('material-ui/List').default;
+var Snackbar = require('material-ui/Snackbar').default;
 
 const styles = {
   customWidth: {
@@ -19,26 +20,40 @@ const buttonStyles = {
 };
 
 module.exports = createReactClass({
-    getInitialState:function(){
-        return {featureName:"", branchName:""};
+    getInitialState(){
+        return {featureName:"", branchName:"", buttonPressed:false};
     },
-    handleFeatureNameChange:function(e){
-        this.setState({featureName:e.target.value});
+    handleFeatureNameChange(e){
+        this.setState({featureName:e.target.value, buttonPressed:false});
     },
-    handleBranchNameChange:function(e){
-        this.setState({branchName:e.target.value});
+    handleBranchNameChange(e){
+        this.setState({branchName:e.target.value, buttonPressed:false});
     },
-    addItem:function(e){
+    snackBarClosed(){
+        this.setState({featureName:"", branchName:"", buttonPressed:false});
+    },
+    snackBarTouched(){
+        this.setState({featureName:"", branchName:"", buttonPressed:false});  
+    },
+    addItem(e){
         e.preventDefault();
         action.add({
             featureName:this.state.featureName,
             branchName:this.state.branchName
         });
-        this.setState({featureName:"", branchName:""});
+        this.setState({featureName:"", branchName:"", buttonPressed:true, message:"Feature added successfully"});
     },
-    render:function(){
+    render(){
         return (
             <div>
+                <Snackbar
+                    open={this.state.buttonPressed}
+                    message={this.state.message}
+                    action="Close"
+                    autoHideDuration={3000}
+                    onRequestClose={this.snackBarClosed}
+                    onActionTouchTap={this.snackBarTouched}
+                />
                 <ListItem>
                     <TextField value={this.state.featureName} floatingLabelText="Enter feature name" style={styles.customWidth} required onChange={this.handleFeatureNameChange}/>
                 </ListItem>

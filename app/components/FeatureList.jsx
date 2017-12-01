@@ -14,6 +14,7 @@ var AutoComplete = require('material-ui/AutoComplete').default;
 var action = require('./../actions/FeatureActionCreator.jsx');
 var RaisedButton = require('material-ui/RaisedButton').default;
 var FlatButton = require('material-ui/FlatButton').default;
+var Snackbar = require('material-ui/Snackbar').default;
 
 const styles = {
   customWidth: {
@@ -28,29 +29,35 @@ const buttonStyles = {
 };
 
 module.exports = createReactClass({
-    getInitialState:function(){
-      return {value:-1, buildURL:"", timestamp:""};  
+    getInitialState(){
+      return {value:"", selectedIndex:-1, buildURL:"", timestamp:"", buttonPressed:false};  
     },
-    featureSelected:function(event, index){
-        this.setState({value:index});
+    featureSelected(chosenRequest, index){
+        this.setState({value:chosenRequest, selectedIndex:index, buttonPressed:false});
     },
     remove(e){
         e.preventDefault();
-        action.remove(this.props.features[this.state.value]);
-        this.setState({value:-1, buildURL:"", timestamp:""});
+        action.remove(this.props.features[this.state.selectedIndex]);
+        this.setState({value:"", buildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:true, message:"Feature removed successfully!!"});
     },
     getBuild(e){
         e.preventDefault();
-        if (this.props.features[this.state.value].buildURL) {
-            this.setState({value:-1, buildURL:this.props.features[this.state.value].buildURL, timestamp:this.props.features[this.state.value].timestamp});
+        if (this.props.features[this.state.selectedIndex].buildURL) {
+            this.setState({buildURL:this.props.features[this.state.selectedIndex].buildURL, timestamp:this.props.features[this.state.selectedIndex].timestamp, buttonPressed:true, message:"Build found!!"});
         } else {
-            this.setState({value:-1, buildURL:"", timestamp:""});
+            this.setState({value:"", buildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:true, message:"Build not found!!"});
         }
     },
     updateInput(searchText, dataSource, params){
-        this.setState({value:-1, buildURL:"", timestamp:""});
+        this.setState({value:"", buildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:false});
+    },    
+    snackBarClosed(){
+        this.setState({buttonPressed:false});
     },
-    render:function(){
+    snackBarTouched(){
+        this.setState({buttonPressed:false});  
+    },
+    render(){
         var features = this.props.features;
         const featureNames = [];
         for (let i = 0; i < features.length; i++) {
@@ -58,7 +65,15 @@ module.exports = createReactClass({
         }
         return (
             <div>
-                <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>  
+                <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+                    <Snackbar
+                        open={this.state.buttonPressed}
+                        message={this.state.message}
+                        autoHideDuration={3000}
+                        action="Close"
+                        onActionTouchTap={this.snackBarTouched}
+                        onRequestClose={this.snackBarClosed}
+                    />
                     <List>
                         <ListItem>
                             <Subheader inset={true}>Get build for a feature or remove a feature from the features list</Subheader>
@@ -69,22 +84,23 @@ module.exports = createReactClass({
                               onNewRequest={this.featureSelected}
                               openOnFocus={true}
                               textFieldStyle={styles.customWidth}
-                              onUpdateInput={this.updateInput}    
+                              onUpdateInput={this.updateInput}
+                              searchText={this.state.value}    
                             />
                         </ListItem>
                         <ListItem>
-                            <RaisedButton label="Get build" style={buttonStyles.customWidth} primary={true} onClick={this.getBuild} disabled={this.state.value==-1}/>
-                            <FlatButton href={this.state.buildURL} target="_blank" label={this.state.buildURL ? "Feature Build URL" : ""} primary={true}/>
+                            <RaisedButton label="Get build" style={buttonStyles.customWidth} primary={true} onClick={this.getBuild} disabled={this.state.value==""}/>      
+                            <FlatButton href={this.state.buildURL} target="_blank" hoverColor="#ffffff" label={this.state.buildURL ? "Feature Build URL" : ""} primary={true}/>
                             <FlatButton label={this.state.timestamp} disabled={true}/>
                         </ListItem>
                         <ListItem>
-                            <RaisedButton label="Remove" style={buttonStyles.customWidth} secondary={true} onClick={this.remove} disabled={this.state.value==-1}/>
+                            <RaisedButton label="Remove" style={buttonStyles.customWidth} secondary={true} onClick={this.remove} disabled={this.state.value==""}/>
                         </ListItem>
                     </List>
                     <Divider />
                     <List>
                         <Subheader inset={true}>Add new feature to the features list</Subheader>
-                        <FeatureListAddFeature/>
+                        <FeatureListAddFeature />
                     </List>
                 </MuiThemeProvider>
             </div>
