@@ -30,7 +30,7 @@ function FeatureStore(){
         })
         features.splice(index, 1);
         triggerListeners();
-        helper.del('/api/features/'+feature._id);
+        helper.del('/api/features'+feature._id);
     }
     
     function onChange(listener){
