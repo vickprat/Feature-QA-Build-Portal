@@ -6,6 +6,8 @@ var TextField = require('material-ui/TextField').default;
 var List = require('material-ui/List').default;
 var ListItem = require('material-ui/List').default;
 var Snackbar = require('material-ui/Snackbar').default;
+var DropDownMenu = require('material-ui/DropDownMenu').DropDownMenu;
+var MenuItem = require('material-ui/MenuItem').default;
 
 const styles = {
   customWidth: {
@@ -19,9 +21,11 @@ const buttonStyles = {
     },
 };
 
+const platformArray = ["iOS", "Android", "Desktop"];
+
 module.exports = createReactClass({
     getInitialState(){
-        return {featureName:"", branchName:"", buttonPressed:false};
+        return {featureName:"", branchName:"", buttonPressed:false, platformMenuItemValue:0};
     },
     handleFeatureNameChange(e){
         this.setState({featureName:e.target.value, buttonPressed:false});
@@ -37,11 +41,30 @@ module.exports = createReactClass({
     },
     addItem(e){
         e.preventDefault();
-        action.add({
-            featureName:this.state.featureName,
-            branchName:this.state.branchName
-        });
-        this.setState({featureName:"", branchName:"", buttonPressed:true, message:"Feature added successfully"});
+        var index = -1;
+        var features = this.props.features;
+        var featureName = this.state.featureName;
+        var platformMenuItemValue = this.state.platformMenuItemValue;
+        features.filter(function(_feature, _index){
+            if(_feature.featureName == featureName && _feature.platform == platformArray[platformMenuItemValue]){
+                index = _index;
+            }
+        })
+        if(index==-1){
+            action.add({
+                featureName:this.state.featureName,
+                branchName:this.state.branchName,
+                platform:platformArray[this.state.platformMenuItemValue]
+            });
+            this.setState({featureName:"", branchName:"", buttonPressed:true, message:"Feature added successfully"});
+        } else {
+            this.setState({buttonPressed:true, message:"Duplicate feature name"});
+        }
+        window.location.reload();
+    },
+    platformMenuItemTapped(e, key, value){
+        e.preventDefault();
+        this.setState({platformMenuItemValue:value});
     },
     render(){
         return (
@@ -59,6 +82,13 @@ module.exports = createReactClass({
                 </ListItem>
                 <ListItem>
                     <TextField value={this.state.branchName} floatingLabelText="Enter git branch name" style={styles.customWidth} required onChange={this.handleBranchNameChange}/>
+                </ListItem>
+                <ListItem>
+                    <DropDownMenu value={this.state.platformMenuItemValue} onChange={this.platformMenuItemTapped}>
+                        <MenuItem value={0} primaryText={platformArray[0]} />
+                        <MenuItem value={1} primaryText={platformArray[1]} />
+                        <MenuItem value={2} primaryText={platformArray[2]} />
+                    </DropDownMenu>
                 </ListItem>
                 <ListItem>
                     <RaisedButton label="Add feature" style={buttonStyles.customWidth} primary={true} onClick={this.addItem} disabled={this.state.featureName==''|| this.state.branchName==''}/>

@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
 var FeatureSchema = {
+    platform:String,
     featureName:String,
     branchName:String,
     buildURL:String,

@@ -28,40 +28,55 @@ const buttonStyles = {
     },
 };
 
+const platformArray = ['iOS', 'Android', 'Desktop'];
+
 module.exports = createReactClass({
     getInitialState(){
-      return {value:"", selectedIndex:-1, buildURL:"", timestamp:"", buttonPressed:false};  
+        return {searchText:"", selectedIndex:-1, buildURL:"", timestamp:"", buttonPressed:false, platformMenuItemValue:0};  
     },
     featureSelected(chosenRequest, index){
-        this.setState({value:chosenRequest, selectedIndex:index, buttonPressed:false});
+        this.setState({searchText:chosenRequest, selectedIndex:index, buttonPressed:false});
     },
     removeFeature(e){
         e.preventDefault();
-        action.remove(this.props.features[this.state.selectedIndex]);
-        this.setState({value:"", buildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:true, message:"Feature removed successfully!!"});
+        var features = this.props.features;
+        const selectedPlatformFeatures = [];
+        for (let i = 0; i < features.length; i++) {
+            if (features[i].platform==platformArray[this.state.platformMenuItemValue]) {
+                selectedPlatformFeatures.push(features[i]);
+            }
+        }
+        action.remove(selectedPlatformFeatures[this.state.selectedIndex]);
+        this.setState({searchText:"", buildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:true, message:"Feature removed successfully!!"});
     },
     getBuild(e){
         e.preventDefault();
         if (this.props.features[this.state.selectedIndex].buildURL) {
             this.setState({buildURL:this.props.features[this.state.selectedIndex].buildURL, timestamp:this.props.features[this.state.selectedIndex].timestamp, buttonPressed:true, message:"Build found!!"});
         } else {
-            this.setState({value:"", buildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:true, message:"Build not found!!"});
+            this.setState({searchText:"", buildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:true, message:"Build not found!!"});
         }
     },
     updateInput(searchText, dataSource, params){
-        this.setState({value:"", buildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:false});
-    },    
+        this.setState({searchText:searchText, buildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:false});
+    },
     snackBarClosed(){
         this.setState({buttonPressed:false});
     },
     snackBarTouched(){
         this.setState({buttonPressed:false});  
     },
+    platformMenuItemTapped(e, key, value){
+        e.preventDefault();
+        this.setState({searchText:"", buildURL:"", timestamp:"", buttonPressed:false, selectedIndex:-1, platformMenuItemValue:value});
+    },
     render(){
         var features = this.props.features;
         const featureNames = [];
         for (let i = 0; i < features.length; i++) {
-            featureNames.push(features[i].featureName);
+            if (features[i].platform==platformArray[this.state.platformMenuItemValue]) {
+                featureNames.push(features[i].featureName);
+            }
         }
         return (
             <div>
@@ -74,10 +89,17 @@ module.exports = createReactClass({
                         onActionTouchTap={this.snackBarTouched}
                         onRequestClose={this.snackBarClosed}
                     />
+                    <Divider />
                     <List>
+                        <Subheader style={{fontSize:'25px'}} inset={true}>Get build for a feature or remove a feature from the features list</Subheader> 
                         <ListItem>
-                            <Divider />
-                            <Subheader style={{fontSize:'25px'}} inset={true}>Get build for a feature or remove a feature from the features list</Subheader>
+                            <DropDownMenu value={this.state.platformMenuItemValue} onChange={this.platformMenuItemTapped}>
+                                <MenuItem value={0} primaryText={platformArray[0]} />
+                                <MenuItem value={1} primaryText={platformArray[1]} />
+                                <MenuItem value={2} primaryText={platformArray[2]} />
+                            </DropDownMenu>
+                        </ListItem>
+                        <ListItem>
                             <AutoComplete
                               floatingLabelText="Search feature name"
                               filter={AutoComplete.caseInsensitiveFilter}
@@ -86,24 +108,25 @@ module.exports = createReactClass({
                               openOnFocus={true}
                               textFieldStyle={styles.customWidth}
                               onUpdateInput={this.updateInput}
-                              searchText={this.state.value}    
+                              searchText={this.state.searchText} 
+                              maxSearchResults={10}
                             />
                         </ListItem>
                         <ListItem>
-                            <RaisedButton label="Get build" style={buttonStyles.customWidth} primary={true} onClick={this.getBuild} disabled={this.state.value==""}/>      
+                            <RaisedButton label="Get build" style={buttonStyles.customWidth} primary={true} onClick={this.getBuild} disabled={this.state.selectedIndex==-1}/>      
                             <FlatButton href={this.state.buildURL} target="_blank" hoverColor="#ffffff" label={this.state.buildURL ? "Feature Build URL" : ""} primary={true}/>
                             <FlatButton label={this.state.timestamp} disabled={true}/>
                         </ListItem>
                         <ListItem>
-                            <RaisedButton label="Remove" style={buttonStyles.customWidth} secondary={true} onClick={this.removeFeature} disabled={this.state.value==""}/>
+                            <RaisedButton label="Remove" style={buttonStyles.customWidth} secondary={true} onClick={this.removeFeature} disabled={this.state.selectedIndex==-1}/>
                         </ListItem>
                     </List>
                     <Divider />
                     <List>
                         <Subheader inset={true} style={{fontSize:'25px'}}>Add new feature to the features list</Subheader>
-                        <FeatureListAddFeature />
-                        <Divider />
+                        <FeatureListAddFeature features={this.props.features}/>
                     </List>
+                    <Divider />
                 </MuiThemeProvider>
             </div>
         )

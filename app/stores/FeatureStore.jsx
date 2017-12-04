@@ -22,15 +22,17 @@ function FeatureStore(){
     }
     
     function removeFeature(feature){
-        var index;
+        var index = -1;
         features.filter(function(_feature, _index){
-            if(_feature.featureName == feature.featureName){
+            if(_feature.featureName == feature.featureName && _feature.platform == feature.platform){
                 index = _index;
             }
         })
-        features.splice(index, 1);
-        triggerListeners();
-        helper.del('/api/features/'+feature._id);
+        if(index!=-1){
+            features.splice(index, 1);
+            triggerListeners();
+            helper.del('/api/features/'+feature._id);
+        }
     }
     
     function onChange(listener){

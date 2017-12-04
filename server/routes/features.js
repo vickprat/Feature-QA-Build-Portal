@@ -4,7 +4,6 @@ module.exports = function(app) {
     app.route('/api/features')
     .get(function(req, res){
         Feature.find(function(error, doc){
-            console.log("data..", doc);
             res.send(doc);
         });
     })
@@ -17,14 +16,12 @@ module.exports = function(app) {
     
     app.route('/api/addFeature')
         .post(function(req, res){
-        console.log("request..", req.body);
         Feature.findOne({branchName:req.body.branchName}, function(error, doc){
             if (doc) {
-                console.log("feature found..", doc);  
                 for (var key in req.body){
                     doc[key] = req.body[key];
                 }
-                doc['timestamp'] = new Date().toUTCString(); 
+                doc['timestamp'] = new Date().toLocaleString(); 
                 doc.save();
             }
             res.status(200).send();
@@ -33,7 +30,6 @@ module.exports = function(app) {
     
     app.route('/api/features/:id')
     .delete(function(req,res){
-        console.log("removing...", req.params.id);
         Feature.find({_id:req.params.id}).remove(function(){
             res.status(202).send();
         });
