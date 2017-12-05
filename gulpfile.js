@@ -22,8 +22,5 @@ gulp.task('bundle', function(){
 });
 
 gulp.task('serve', ['bundle', 'live-server'], function(){
-    browserSync.init(null, {
-        proxy:"http://localhost:7777",
-        port:9001
-    });
+    console.log("Server start successfully");
 });
