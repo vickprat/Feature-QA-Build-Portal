@@ -8,4 +8,4 @@ chmod 755 *
 
 npm install
 mongod --fork --logpath /tmp/mongod.log
-gulp serve
+node_modules/gulp/bin/gulp.js serve
