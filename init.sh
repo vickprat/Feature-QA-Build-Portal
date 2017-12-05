@@ -7,5 +7,5 @@ echo '[LOG] git pull completed'
 chmod 755 *
 
 npm install
-nohup mongod &
+mongod --fork --logpath /tmp/mongod.log
 gulp serve
