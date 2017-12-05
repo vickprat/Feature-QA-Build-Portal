@@ -1,3 +1,7 @@
+SCRIPTDIR="$(dirname "$0")"
+
+cd $SCRIPTDIR
+
 branch=master
 git fetch origin
 git checkout $branch
@@ -7,3 +11,5 @@ echo '[LOG] git pull completed'
 chmod 755 *
 
 sh start.sh
+
+cd -
