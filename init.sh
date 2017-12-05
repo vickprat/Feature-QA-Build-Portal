@@ -6,6 +6,4 @@ git pull origin $branch
 echo '[LOG] git pull completed'
 chmod 755 *
 
-npm install
-mongod --fork --logpath /tmp/mongod.log
-node_modules/gulp/bin/gulp.js serve
+sh start.sh
