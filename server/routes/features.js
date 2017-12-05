@@ -16,7 +16,7 @@ module.exports = function(app) {
     
     app.route('/api/addFeature')
         .post(function(req, res){
-        Feature.findOne({branchName:req.body.branchName}, function(error, doc){
+        Feature.findOne({branchName:req.body.branchName, platform:req.body.platform}, function(error, doc){
             if (doc) {
                 for (var key in req.body){
                     doc[key] = req.body[key];
