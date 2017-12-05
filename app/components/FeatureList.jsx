@@ -15,6 +15,7 @@ var action = require('./../actions/FeatureActionCreator.jsx');
 var RaisedButton = require('material-ui/RaisedButton').default;
 var FlatButton = require('material-ui/FlatButton').default;
 var Snackbar = require('material-ui/Snackbar').default;
+var Dialog = require('material-ui/Dialog').default;
 
 const styles = {
   customWidth: {
@@ -32,10 +33,14 @@ const platformArray = ['iOS', 'Android', 'Desktop'];
 
 module.exports = createReactClass({
     getInitialState(){
-        return {searchText:"", selectedIndex:-1, buildURL:"", timestamp:"", buttonPressed:false, platformMenuItemValue:0};  
+        return {searchText:"", selectedIndex:-1, buildURL:"", timestamp:"", openDialog:false, buttonPressed:false, platformMenuItemValue:0};  
     },
     featureSelected(chosenRequest, index){
         this.setState({searchText:chosenRequest, selectedIndex:index, buttonPressed:false});
+    },
+    openDialog(e){
+        e.preventDefault();
+        this.setState({openDialog:true});
     },
     removeFeature(e){
         e.preventDefault();
@@ -47,7 +52,10 @@ module.exports = createReactClass({
             }
         }
         action.remove(selectedPlatformFeatures[this.state.selectedIndex]);
-        this.setState({searchText:"", buildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:true, message:"Feature removed successfully!!"});
+        this.setState({searchText:"", buildURL:"", timestamp:"", selectedIndex:-1, openDialog:false, buttonPressed:true, message:"Feature removed successfully!!"});
+    },
+    handleDialogClose(){
+        this.setState({openDialog:false});
     },
     getBuild(e){
         e.preventDefault();
@@ -71,6 +79,8 @@ module.exports = createReactClass({
         this.setState({searchText:"", buildURL:"", timestamp:"", buttonPressed:false, selectedIndex:-1, platformMenuItemValue:value});
     },
     render(){
+        const actions = [<FlatButton label="YES" primary={true} onClick={this.removeFeature}/>,
+                         <FlatButton label="NO" primary={true} onClick={this.handleDialogClose}/>];
         var features = this.props.features;
         const featureNames = [];
         for (let i = 0; i < features.length; i++) {
@@ -107,6 +117,7 @@ module.exports = createReactClass({
                               onNewRequest={this.featureSelected}
                               openOnFocus={true}
                               textFieldStyle={styles.customWidth}
+                              listStyle={styles.customWidth}    
                               onUpdateInput={this.updateInput}
                               searchText={this.state.searchText} 
                               maxSearchResults={10}
@@ -118,7 +129,10 @@ module.exports = createReactClass({
                             <FlatButton label={this.state.timestamp} disabled={true}/>
                         </ListItem>
                         <ListItem>
-                            <RaisedButton label="Remove" style={buttonStyles.customWidth} secondary={true} onClick={this.removeFeature} disabled={this.state.selectedIndex==-1}/>
+                            <RaisedButton label="Remove" style={buttonStyles.customWidth} secondary={true} onClick={this.openDialog} disabled={this.state.selectedIndex==-1}/>
+                            <Dialog actions={actions} modal={false} open={this.state.openDialog} onRequestClose={this.handleDialogClose}>
+                                Are you sure you want to remove the feature ?
+                            </Dialog>
                         </ListItem>
                     </List>
                     <Divider />

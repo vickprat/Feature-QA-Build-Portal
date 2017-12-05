@@ -35,9 +35,11 @@ module.exports = createReactClass({
     },
     snackBarClosed(){
         this.setState({featureName:"", branchName:"", buttonPressed:false});
+        window.location.reload();
     },
     snackBarTouched(){
         this.setState({featureName:"", branchName:"", buttonPressed:false});  
+        window.location.reload();
     },
     addItem(e){
         e.preventDefault();
@@ -60,7 +62,6 @@ module.exports = createReactClass({
         } else {
             this.setState({buttonPressed:true, message:"Duplicate feature name"});
         }
-        window.location.reload();
     },
     platformMenuItemTapped(e, key, value){
         e.preventDefault();
