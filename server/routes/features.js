@@ -23,8 +23,10 @@ module.exports = function(app) {
                 }
                 doc['timestamp'] = new Date().toLocaleString(); 
                 doc.save();
+                res.status(200).send("Feature found successfully");
+            } else {
+              res.status(404).send("Feature not found!!");
             }
-            res.status(200).send();
         });
     })
     
