@@ -14,7 +14,7 @@ module.exports = function(app) {
         });
     })
     
-    app.route('/api/addFeature')
+    app.route('/api/addBuild')
         .post(function(req, res){
         Feature.findOne({branchName:req.body.branchName, platform:req.body.platform}, function(error, doc){
             if (doc) {
@@ -23,8 +23,12 @@ module.exports = function(app) {
                 }
                 doc['timestamp'] = new Date().toLocaleString(); 
                 doc.save();
+                res.status(200);
+                res.send({message:"Build added successfully!!"});
+            } else {
+                res.status(403);    
+                res.send({message:"Feature not found!!"});
             }
-            res.status(200).send();
         });
     })
     
