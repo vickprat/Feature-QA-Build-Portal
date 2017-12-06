@@ -141,6 +141,9 @@ module.exports = createReactClass({
                         <FeatureListAddFeature features={this.props.features}/>
                     </List>
                     <Divider />
+                    <List>
+                        <Subheader style={{fontSize:'15px'}}>Made with 💗 by फ्लॉक iOS टीम</Subheader>
+                    </List>
                 </MuiThemeProvider>
             </div>
         )
