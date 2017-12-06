@@ -23,9 +23,11 @@ module.exports = function(app) {
                 }
                 doc['timestamp'] = new Date().toLocaleString(); 
                 doc.save();
-                res.status(200).send("Feature found successfully");
+                res.status(200);
+                res.send({message:"Build added successfully!!"});
             } else {
-              res.status(404).send("Feature not found!!");
+                res.status(403);    
+                res.send({message:"Feature not found!!"});
             }
         });
     })
