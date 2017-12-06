@@ -27,3 +27,8 @@ curl -X POST \
 200 `{ "message": "Build added successfully!!"}`
 
 403 `{ "message": "Feature not found!!"}`
+
+
+## Author
+
+* Prateek Khandelwal, prateek.kh@flock.com
