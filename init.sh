@@ -2,7 +2,7 @@ SCRIPTDIR="$(dirname "$0")"
 
 cd $SCRIPTDIR
 
-branch=master
+branch=release
 git fetch origin
 git checkout $branch
 git reset HEAD --hard
