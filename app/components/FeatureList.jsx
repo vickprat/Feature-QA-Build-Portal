@@ -120,7 +120,7 @@ module.exports = createReactClass({
                               listStyle={styles.customWidth}    
                               onUpdateInput={this.updateInput}
                               searchText={this.state.searchText} 
-                              maxSearchResults={10}
+                              listStyle={{maxHeight:500,overflow:'auto'}}
                             />
                         </ListItem>
                         <ListItem>
