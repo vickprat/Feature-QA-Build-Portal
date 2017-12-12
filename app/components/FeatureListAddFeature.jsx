@@ -46,9 +46,10 @@ module.exports = createReactClass({
         var index = -1;
         var features = this.props.features;
         var featureName = this.state.featureName;
+        var branchName = this.state.branchName;
         var platformMenuItemValue = this.state.platformMenuItemValue;
         features.filter(function(_feature, _index){
-            if(_feature.featureName == featureName && _feature.platform == platformArray[platformMenuItemValue]){
+            if((_feature.featureName == featureName || _feature.branchName == branchName) && _feature.platform == platformArray[platformMenuItemValue]){
                 index = _index;
             }
         })
@@ -60,7 +61,7 @@ module.exports = createReactClass({
             });
             this.setState({featureName:"", branchName:"", buttonPressed:true, message:"Feature added successfully"});
         } else {
-            this.setState({buttonPressed:true, message:"Duplicate feature name"});
+            this.setState({buttonPressed:true, message:"Duplicate feature or branch name"});
         }
     },
     platformMenuItemTapped(e, key, value){
