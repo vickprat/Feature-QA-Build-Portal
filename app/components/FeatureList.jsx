@@ -118,8 +118,9 @@ module.exports = createReactClass({
                               openOnFocus={true}
                               textFieldStyle={styles.customWidth}
                               onUpdateInput={this.updateInput}
-                              searchText={this.state.searchText} 
-                              listStyle={{maxHeight:500,overflow:'auto',width:styles.width}}
+                              searchText={this.state.searchText}
+                              fullWidth={true}
+                              listStyle={{maxHeight:500,overflow:'auto'}}
                             />
                         </ListItem>
                         <ListItem>
