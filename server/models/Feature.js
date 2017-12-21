@@ -4,7 +4,8 @@ var FeatureSchema = {
     platform:String,
     featureName:String,
     branchName:String,
-    buildURL:String,
+    preProdBuildURL:String,
+    prodBuildURL:String,
     timestamp:String
 };
 

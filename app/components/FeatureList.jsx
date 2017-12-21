@@ -33,7 +33,7 @@ const platformArray = ['iOS', 'Android', 'Desktop'];
 
 module.exports = createReactClass({
     getInitialState(){
-        return {searchText:"", selectedIndex:-1, buildURL:"", timestamp:"", openDialog:false, buttonPressed:false, platformMenuItemValue:0};  
+        return {searchText:"", selectedIndex:-1, preProdBuildURL:"", prodBuildURL:"", timestamp:"", openDialog:false, buttonPressed:false, platformMenuItemValue:0};  
     },
     featureSelected(chosenRequest, index){
         this.setState({searchText:chosenRequest, selectedIndex:index, buttonPressed:false});
@@ -52,21 +52,22 @@ module.exports = createReactClass({
             }
         }
         action.remove(selectedPlatformFeatures[this.state.selectedIndex]);
-        this.setState({searchText:"", buildURL:"", timestamp:"", selectedIndex:-1, openDialog:false, buttonPressed:true, message:"Feature removed successfully!!"});
+        this.setState({searchText:"", preProdBuildURL:"", prodBuildURL:"", timestamp:"", selectedIndex:-1, openDialog:false, buttonPressed:true, message:"Feature removed successfully!!"});
     },
     handleDialogClose(){
         this.setState({openDialog:false});
     },
     getBuild(e){
         e.preventDefault();
-        if (this.props.features[this.state.selectedIndex].buildURL) {
-            this.setState({buildURL:this.props.features[this.state.selectedIndex].buildURL, timestamp:this.props.features[this.state.selectedIndex].timestamp, buttonPressed:true, message:"Build found!!"});
+        var selectedFeature = this.props.features[this.state.selectedIndex];
+        if (selectedFeature.preProdBuildURL || selectedFeature.prodBuildURL) {
+            this.setState({preProdBuildURL:selectedFeature.preProdBuildURL, prodBuildURL:selectedFeature.prodBuildURL, timestamp:selectedFeature.timestamp, buttonPressed:true, message:"Build found!!"});
         } else {
-            this.setState({searchText:"", buildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:true, message:"Build not found!!"});
+            this.setState({searchText:"", preProdBuildURL:"", prodBuildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:true, message:"Build not found!!"});
         }
     },
     updateInput(searchText, dataSource, params){
-        this.setState({searchText:searchText, buildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:false});
+        this.setState({searchText:searchText, preProdBuildURL:"", prodBuildURL:"", timestamp:"", selectedIndex:-1, buttonPressed:false});
     },
     snackBarClosed(){
         this.setState({buttonPressed:false});
@@ -76,7 +77,7 @@ module.exports = createReactClass({
     },
     platformMenuItemTapped(e, key, value){
         e.preventDefault();
-        this.setState({searchText:"", buildURL:"", timestamp:"", buttonPressed:false, selectedIndex:-1, platformMenuItemValue:value});
+        this.setState({searchText:"", preProdBuildURL:"", prodBuildURL:"", timestamp:"", buttonPressed:false, selectedIndex:-1, platformMenuItemValue:value});
     },
     render(){
         const actions = [<FlatButton label="YES" primary={true} onClick={this.removeFeature}/>,
@@ -125,7 +126,8 @@ module.exports = createReactClass({
                         </ListItem>
                         <ListItem>
                             <RaisedButton label="Get build" style={buttonStyles.customWidth} primary={true} onClick={this.getBuild} disabled={this.state.selectedIndex==-1}/>      
-                            <FlatButton href={this.state.buildURL} target="_blank" hoverColor="#ffffff" label={this.state.buildURL ? "Feature Build URL" : ""} primary={true}/>
+                            <FlatButton href={this.state.preProdBuildURL} target="_blank" hoverColor="#ffffff" label={this.state.preProdBuildURL ? "Pre-prod Build URL" : ""} primary={true}/>
+                            <FlatButton href={this.state.prodBuildURL} target="_blank" hoverColor="#ffffff" label={this.state.prodBuildURL ? "Prod Build URL" : ""} primary={true}/>
                             <FlatButton label={this.state.timestamp} disabled={true}/>
                         </ListItem>
                         <ListItem>
