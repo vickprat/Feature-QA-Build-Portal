@@ -4,7 +4,9 @@ Send a `POST` request to `http://ios-echo.internal.directi.com:7777/api/addBuild
 
 `branchName` : String representing branch name on git
 
-`buildURL` : Link to the build
+`preProdBuildURL` : Link to the pre-prod build
+
+`prodBuildURL` : Link to the prod build
 
 `platform` : iOS / Android / Desktop
 
@@ -17,7 +19,8 @@ curl -X POST \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/x-www-form-urlencoded' \
   -d branchName="guests-master" \
-  -d buildURL="http://ios-echo.internal.directi.com:8080/job/Flock.alpha/20/artifact/Build/echo/artifacts/ota.html" \
+  -d preProdBuildURL="http://ios-echo.internal.directi.com:8080/job/Flock.alpha/20/artifact/Build/echo/artifacts/ota.html" \
+  -d prodBuildURL="http://ios-echo.internal.directi.com:8080/job/Flock.alpha/20/artifact/Build/echo/artifacts/ota.html" \
   -d platform="iOS"
 ```
 
