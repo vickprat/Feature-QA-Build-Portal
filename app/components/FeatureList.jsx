@@ -59,7 +59,14 @@ module.exports = createReactClass({
     },
     getBuild(e){
         e.preventDefault();
-        var selectedFeature = this.props.features[this.state.selectedIndex];
+        var features = this.props.features;
+        const selectedPlatformFeatures = [];
+        for (let i = 0; i < features.length; i++) {
+            if (features[i].platform==platformArray[this.state.platformMenuItemValue]) {
+                selectedPlatformFeatures.push(features[i]);
+            }
+        }
+        var selectedFeature = selectedPlatformFeatures[this.state.selectedIndex];
         if (selectedFeature.preProdBuildURL || selectedFeature.prodBuildURL) {
             this.setState({preProdBuildURL:selectedFeature.preProdBuildURL, prodBuildURL:selectedFeature.prodBuildURL, timestamp:selectedFeature.timestamp, buttonPressed:true, message:"Build found!!"});
         } else {
