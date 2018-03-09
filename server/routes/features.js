@@ -7,15 +7,25 @@ module.exports = function(app) {
             res.send(doc);
         });
     })
+    
+    app.route('/api/registerFeature')
     .post(function(req, res){
-        var feature = new Feature(req.body);
-        feature.save(function(err, data){
-            res.status(300).send();
+        Feature.findOne({branchName:req.body.branchName, platform:req.body.platform}, function(error, doc){
+            if (doc) {
+                res.status(403);
+                res.send({message:"Duplicate feature found!!"});
+            } else {
+                var feature = new Feature(req.body);
+                feature.save(function(err, data){
+                    res.status(200);
+                    res.send({message:"Feature registered successfully!!"});
+                });
+            }
         });
     })
     
     app.route('/api/addBuild')
-        .post(function(req, res){
+    .post(function(req, res){
         Feature.findOne({branchName:req.body.branchName, platform:req.body.platform}, function(error, doc){
             if (doc) {
                 for (var key in req.body){
@@ -32,10 +42,17 @@ module.exports = function(app) {
         });
     })
     
-    app.route('/api/features/:id')
-    .delete(function(req,res){
-        Feature.find({_id:req.params.id}).remove(function(){
-            res.status(202).send();
+    app.route('/api/removefeature/:platform/:branchName')
+    .delete(function(req, res){
+        Feature.findOne({branchName:req.params.branchName, platform:req.params.platform}, function(error, doc){
+            if (doc) {
+                doc.remove();
+                res.status(200);
+                res.send({message:"Feature removed successfully!!"});
+            } else {
+                res.status(403);
+                res.send({message:"Feature not found!!"});
+            }
         });
     })
 }

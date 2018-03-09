@@ -93,7 +93,7 @@ module.exports = createReactClass({
         const featureNames = [];
         for (let i = 0; i < features.length; i++) {
             if (features[i].platform==platformArray[this.state.platformMenuItemValue]) {
-                featureNames.push(features[i].featureName);
+                featureNames.push(features[i].featureName + " (" + features[i].branchName + ")");
             }
         }
         return (

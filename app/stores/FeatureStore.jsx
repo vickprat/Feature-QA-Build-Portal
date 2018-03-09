@@ -18,7 +18,7 @@ function FeatureStore(){
     function addFeature(feature){
         features.push(feature);
         triggerListeners();
-        helper.post("/api/features", feature);
+        helper.post('/api/registerFeature', feature);
     }
     
     function removeFeature(feature){
@@ -31,7 +31,7 @@ function FeatureStore(){
         if(index!=-1){
             features.splice(index, 1);
             triggerListeners();
-            helper.del('/api/features/'+feature._id);
+            helper.del('/api/removeFeature/' + feature.platform + '/' + feature.branchName);
         }
     }
     
